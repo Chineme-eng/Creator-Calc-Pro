@@ -131,31 +131,47 @@ body::before {
   padding: 0.3rem;
 }
 
-/* Base transition for smooth detaching */
+/* 1. Add fluid transitions to the base nav */
 .header-nav {
   z-index: 1000;
-  transition: box-shadow 0.3s ease, background 0.3s ease;
+  /* This ensures hover states and the return trip feel smooth */
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
+  transform-origin: center top;
 }
 
-/* The floating state */
+/* 2. The Floating State */
 .header-nav.floating {
   position: fixed;
   top: 1.5rem;
   left: 50%;
-  transform: translateX(-50%);
-  box-shadow: var(--shadow-md);
-  background: rgba(238, 231, 216, 0.85); /* Semi-transparent cream-mid */
-  backdrop-filter: blur(12px);
-  border-color: rgba(227, 217, 198, 0.5); 
+  box-shadow: 0 12px 32px rgba(28, 24, 20, 0.12);
+  background: rgba(246, 241, 233, 0.85);
+  backdrop-filter: blur(16px); /* Stronger blur for that frosted glass look */
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(227, 217, 198, 0.6);
+  
+  /* Trigger the fluid entry animation */
+  animation: pillDrop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Dark mode support for the floating pill */
+/* 3. The Custom Keyframes for the "Drop & Pop" effect */
+@keyframes pillDrop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+/* 4. Refined Dark Mode Floating State */
 body.dark .header-nav.floating {
   background: rgba(36, 31, 26, 0.85);
-  border-color: #3C342C;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
-  
 .nav-tab {
   padding: 0.4rem 1.1rem;
   border-radius: 100px;
@@ -1226,12 +1242,14 @@ body.dark .advice-icon.info { background: #1C252C; }
         <div class="brand-name">Creator<em>Calc</em></div>
         <span class="brand-tag">Pro Edition</span>
       </div>
-      <nav class="header-nav" id="headerNav">
-        <div class="nav-tab active" onclick="showPage('calculator')">Calculator</div>
-        <div class="nav-tab" onclick="showPage('comparison')">Compare</div>
-        <div class="nav-tab" onclick="showPage('charts')">Analytics</div>
-        <div class="nav-tab" onclick="showPage('tools')">Tools</div>
-      </nav>
+      <div style="min-width: 320px; display: flex; justify-content: center;">
+  <nav class="header-nav" id="headerNav">
+    <div class="nav-tab active" onclick="showPage('calculator')">Calculator</div>
+    <div class="nav-tab" onclick="showPage('comparison')">Compare</div>
+    <div class="nav-tab" onclick="showPage('charts')">Analytics</div>
+    <div class="nav-tab" onclick="showPage('tools')">Tools</div>
+  </nav>
+</div>
       <div style="display:flex;gap:0.5rem;align-items:center;">
         <button class="btn btn-ghost" onclick="toggleDark()" style="padding:0.5rem 0.8rem;">🌙</button>
         <button class="btn btn-primary" onclick="exportPDF()">↓ Export</button>
