@@ -84,10 +84,7 @@ body::before {
 .header {
   padding: 2.5rem 0 1.5rem;
   border-bottom: 1px solid var(--cream-dark);
-  position: sticky;
-  top: 0;
   background: rgba(246,241,233,0.92);
-  backdrop-filter: blur(12px);
   z-index: 100;
 }
 
@@ -134,6 +131,31 @@ body::before {
   padding: 0.3rem;
 }
 
+/* Base transition for smooth detaching */
+.header-nav {
+  z-index: 1000;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* The floating state */
+.header-nav.floating {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: var(--shadow-md);
+  background: rgba(238, 231, 216, 0.85); /* Semi-transparent cream-mid */
+  backdrop-filter: blur(12px);
+  border-color: rgba(227, 217, 198, 0.5); 
+}
+
+/* Dark mode support for the floating pill */
+body.dark .header-nav.floating {
+  background: rgba(36, 31, 26, 0.85);
+  border-color: #3C342C;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+  
 .nav-tab {
   padding: 0.4rem 1.1rem;
   border-radius: 100px;
@@ -2111,6 +2133,20 @@ function filterNiches(q) {
   });
 }
 
+// ════════════════════════════════════════════════════════
+// FLOATING NAV PILL
+// ════════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('headerNav');
+  if (!nav) return;
+  
+  if (window.scrollY > 100) {
+    nav.classList.add('floating');
+  } else {
+    nav.classList.remove('floating');
+  }
+});
+  
 // ════════════════════════════════════════════════════════
 // SELECTORS
 // ════════════════════════════════════════════════════════
